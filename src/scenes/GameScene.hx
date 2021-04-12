@@ -1,5 +1,6 @@
 package scenes;
 
+import avenyrh.engine.Engine;
 import avenyrh.InputManager;
 import avenyrh.Vector2;
 import hxd.Pixels;
@@ -15,7 +16,7 @@ class GameScene extends Scene
     var gridWidth : Int = 12;
     var gridHeight : Int = 12;
     var gameTiles : Array<GameTile>;
-    var tilesData : Array<Int>;
+    var tileStates : Array<TileState>;
     var gridHolder : Object;
 
     var flowerTiles : Array<Tile>;
@@ -30,7 +31,7 @@ class GameScene extends Scene
     override function added() 
     {
         gameTiles = [];
-        tilesData = [];
+        tileStates = [];
         gridHolder = new Object(scroller);
         gridHolder.scale(2);
         gridHolder.setPosition(-200, -100);
@@ -50,6 +51,8 @@ class GameScene extends Scene
                 var gt = new GameTile(gridHolder, x, y);
                 gameTiles[x + gridWidth * y] = gt;
                 gt.changeTile(Tile.fromColor(pixels.getPixel(x, y), 16, 16));
+
+                tileStates[x + gridWidth * y] = ColorCoding.getStateFromColor(pixels.getPixel(x, y));
             }
         }
 
@@ -76,10 +79,20 @@ class GameScene extends Scene
 
     function moveFlower(dirX : Int, dirY : Int)
     {
-        if(currentPosition.x + dirX < 0 && currentPosition.x + dirX >= gridWidth && 
-            currentPosition.y + dirY < 0 && currentPosition.y + dirY >= gridHeight)
+        var newX : Int = Std.int(currentPosition.x) + dirX;
+        var newY : Int = Std.int(currentPosition.y) + dirY;
+
+        //Check if still in grid
+        if(newX < 0 || newX >= gridWidth || newY < 0 || newY >= gridHeight)
             return;
 
+        var nextTileState : TileState = getTileState(newX, newY);
+        
+        if(nextTileState == Obstable || nextTileState == Flower)
+            return;
+        else if(nextTileState == Objective)
+            Engine.instance.addScene(new GameScene());
+ 
         var oldDir : Int = currentDirection;
         var oldPosition : Vector2 = currentPosition;
         
@@ -90,8 +103,16 @@ class GameScene extends Scene
 
     function getGameTile(x : Int, y : Int) : GameTile
     {
-        if(x < gridWidth && y < gridHeight)
+        if(x < gridWidth && x >= 0 && y < gridHeight && y >= 0)
             return gameTiles[x + gridWidth * y];
+        else 
+            return null;
+    }
+
+    function getTileState(x : Int, y : Int) : TileState
+    {
+        if(x < gridWidth && x >= 0 && y < gridHeight && y >= 0)
+            return tileStates[x + gridWidth * y];
         else 
             return null;
     }
@@ -175,5 +196,14 @@ class GameScene extends Scene
     function setNewTile()
     {
         getGameTile(Std.int(currentPosition.x), Std.int(currentPosition.y)).changeTile(flowerTiles[currentDirection - 1]);
+        tileStates[Std.int(currentPosition.x) + gridWidth * Std.int(currentPosition.y)] = Flower;
     }
+}
+
+enum TileState
+{
+    Empty;
+    Obstable;
+    Flower;
+    Objective;
 }
