@@ -1,0 +1,12 @@
+-cp src
+-lib heaps
+-lib hlsdl
+-lib castle
+-lib avenyrhEngine
+
+-D windowFixed=1
+-D windowTitle=GreenwitchGrove
+-D windowSize=1280x720
+
+-main Boot
+-hl game.hl
