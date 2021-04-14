@@ -1,5 +1,7 @@
 package scenes;
 
+import flowers.*;
+import h2d.Bitmap;
 import avenyrh.engine.Engine;
 import avenyrh.InputManager;
 import avenyrh.Vector2;
@@ -19,9 +21,12 @@ class GameScene extends Scene
     var tileStates : Array<TileState>;
     var gridHolder : Object;
 
-    var flowerTiles : Array<Tile>;
+    var currentFlower : Flower;
+    var armoise : Armoise;
     var currentPosition : Vector2;
     var currentDirection : Int;
+
+    var sky : Bitmap;
 
     public function new() 
     {
@@ -30,11 +35,10 @@ class GameScene extends Scene
 
     override function added() 
     {
-        gameTiles = [];
-        tileStates = [];
-        gridHolder = new Object(scroller);
-        gridHolder.scale(2);
-        gridHolder.setPosition(-200, -100);
+        camera.zoom = 2;
+
+        sky = new Bitmap(Tile.fromColor(0xFF5fcde4, 400, height), scroller);
+        sky.setPosition(-200, -height / 2);
 
         #if debug
         var level : Tile = hxd.Res.images.level.Level.toTile();
@@ -42,25 +46,16 @@ class GameScene extends Scene
         var level : Tile = hxd.Res.images.level.Level.toTile();
         #end
 
-        var pixels : Pixels = level.getTexture().capturePixels();
+        buildLevel(level);
 
-        for(x in 0 ... gridWidth)
-        {
-            for(y in 0 ... gridHeight)
-            {
-                var gt = new GameTile(gridHolder, x, y);
-                gameTiles[x + gridWidth * y] = gt;
-                gt.changeTile(Tile.fromColor(pixels.getPixel(x, y), 16, 16));
-
-                tileStates[x + gridWidth * y] = ColorCoding.getStateFromColor(pixels.getPixel(x, y));
-            }
-        }
-
-        flowerTiles = hxd.Res.images.Flowers.toTile().split(16);
+        armoise = new Armoise(hxd.Res.images.Flowers.toTile());
+        currentFlower = armoise;
 
         currentDirection = 1;
         currentPosition = new Vector2(5, 10);
         setNewTile();
+
+        var gameTime = new GameTime(this);
     }
 
     override function update(dt : Float) 
@@ -75,6 +70,31 @@ class GameScene extends Scene
             moveFlower(-1, 0);
         else if(InputManager.getKeyDown("RightArrow"))
             moveFlower(1, 0);
+    }
+
+    function buildLevel(level : Tile)
+    {
+        if(gridHolder != null)
+            gridHolder.remove();
+
+        gameTiles = [];
+        tileStates = [];
+        gridHolder = new Object(scroller);
+        gridHolder.setPosition(-100, -100);
+
+        var pixels : Pixels = level.getTexture().capturePixels();
+
+        for(x in 0 ... gridWidth)
+        {
+            for(y in 0 ... gridHeight)
+            {
+                var gt = new GameTile(gridHolder, x, y);
+                gameTiles[x + gridWidth * y] = gt;
+                gt.changeTile(Tile.fromColor(pixels.getPixel(x, y), 16, 16));
+
+                tileStates[x + gridWidth * y] = ColorCoding.getStateFromColor(pixels.getPixel(x, y));
+            }
+        }
     }
 
     function moveFlower(dirX : Int, dirY : Int)
@@ -190,12 +210,12 @@ class GameScene extends Scene
                 return;
         }
 
-        getGameTile(Std.int(oldPosition.x), Std.int(oldPosition.y)).changeTile(flowerTiles[i - 1]);
+        getGameTile(Std.int(oldPosition.x), Std.int(oldPosition.y)).changeTile(currentFlower.tiles[i - 1]);
     }
 
     function setNewTile()
     {
-        getGameTile(Std.int(currentPosition.x), Std.int(currentPosition.y)).changeTile(flowerTiles[currentDirection - 1]);
+        getGameTile(Std.int(currentPosition.x), Std.int(currentPosition.y)).changeTile(currentFlower.tiles[currentDirection - 1]);
         tileStates[Std.int(currentPosition.x) + gridWidth * Std.int(currentPosition.y)] = Flower;
     }
 }
