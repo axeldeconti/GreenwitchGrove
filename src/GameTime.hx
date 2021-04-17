@@ -6,16 +6,21 @@ import scenes.GameScene;
 
 class GameTime extends Process
 {
+    var scene : GameScene;
+
     var holder : Object;
     var bg : Bitmap;
     var border : Bitmap;
 
-    var speedMultiplier : Float = 12;
+    var speedMultiplier : Float = 60;
     var currentTime : Float;
+    var isDaytime : Bool;
 
     public override function new(scene : GameScene)
     {
         super("GameTime", scene);
+
+        this.scene = scene;
 
         holder = new Object(scene.ui);
         holder.scale(2);
@@ -31,7 +36,8 @@ class GameTime extends Process
         border.tile.dx = -32;
         border.tile.dy = -32;
 
-        currentTime = 0;
+        currentTime = 90;
+        isDaytime = true;
     }
 
     override function update(dt:Float) 
@@ -41,7 +47,20 @@ class GameTime extends Process
         currentTime -= dt * speedMultiplier;
 
         var angle : Float = AMath.toRad(currentTime);
+        var degAngle : Float = AMath.toDeg(angle) % 360;
 
         bg.rotation = angle;
+
+        if(isDaytime && degAngle < -90 && degAngle > -270)
+        {
+            isDaytime = false;
+            scene.triggerEffect();
+            trace("Night time");
+        }
+        else if(!isDaytime && degAngle < -270)
+        {
+            isDaytime = true;
+            trace("Day time");
+        }
     }
 }

@@ -15,10 +15,20 @@ class GameTile extends GameObject
     {
         super('GameTile[$x,$y]', parent);
 
-        setPosition((size + 1) * x, (size + 1) * y);
+        setPosition(size * x, size * y);
 
         tile = Tile.fromColor(AMath.irandRange(0, Color.iBLACK), size, size);
 
         inter = new Interactive(size, size, this);
+    }
+
+    override function changeTile(t : Tile) 
+    {
+        super.changeTile(t);
+
+        if(t == null)
+            alpha = 0;
+        else
+            alpha = 1;
     }
 }

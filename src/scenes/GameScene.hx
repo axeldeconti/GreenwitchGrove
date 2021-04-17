@@ -1,5 +1,7 @@
 package scenes;
 
+import avenyrh.Color;
+import h2d.Flow;
 import flowers.*;
 import h2d.Bitmap;
 import avenyrh.engine.Engine;
@@ -15,18 +17,23 @@ class GameScene extends Scene
 {
     var s2d : h2d.Scene;
 
-    var gridWidth : Int = 12;
-    var gridHeight : Int = 12;
+    public var gridWidth : Int = 12;
+    public var gridHeight : Int = 12;
     var gameTiles : Array<GameTile>;
-    var tileStates : Array<TileState>;
+    public var tileStates : Array<TileState>;
     var gridHolder : Object;
 
     var currentFlower : Flower;
     var armoise : Armoise;
-    var currentPosition : Vector2;
-    var currentDirection : Int;
+    public var currentPosition : Vector2;
+    public var currentDirection : Int;
+    public var windDirection : Int;
 
     var sky : Bitmap;
+
+    var currentEffect : Effect;
+    var buttonFlow : Flow;
+    var effectButtons : Array<GameButton>;
 
     public function new() 
     {
@@ -35,10 +42,10 @@ class GameScene extends Scene
 
     override function added() 
     {
-        camera.zoom = 2;
+        camera.zoom = 3;
 
-        sky = new Bitmap(Tile.fromColor(0xFF5fcde4, 400, height), scroller);
-        sky.setPosition(-200, -height / 2);
+        sky = new Bitmap(Tile.fromColor(0xFF5fcde4, 300, height), scroller);
+        sky.setPosition(-80, -height / 2);
 
         #if debug
         var level : Tile = hxd.Res.images.level.Level.toTile();
@@ -48,14 +55,32 @@ class GameScene extends Scene
 
         buildLevel(level);
 
-        armoise = new Armoise(hxd.Res.images.Flowers.toTile());
+        armoise = new Armoise(this, hxd.Res.images.Armoise.toTile());
         currentFlower = armoise;
 
         currentDirection = 1;
+        windDirection = 1;
         currentPosition = new Vector2(5, 10);
         setNewTile();
+        currentFlower.grow(currentPosition, currentDirection);
 
         var gameTime = new GameTime(this);
+
+        //Buttons flow
+        buttonFlow = new Flow(ui);
+        ui.getProperties(buttonFlow).align(Middle, Left);
+        ui.getProperties(buttonFlow).offsetX = 10;
+        ui.getProperties(buttonFlow).offsetY = 40;
+        buttonFlow.layout = Vertical;
+        buttonFlow.verticalSpacing = 10;
+        buttonFlow.backgroundTile = Tile.fromColor(Color.iBROWN);
+        
+        effectButtons = [];
+        effectButtons.push(new GameButton(buttonFlow, this, None));
+        effectButtons.push(new GameButton(buttonFlow, this, Water));
+        effectButtons.push(new GameButton(buttonFlow, this, Earth));
+        effectButtons.push(new GameButton(buttonFlow, this, Wind));
+        effectButtons.push(new GameButton(buttonFlow, this, Fire));
     }
 
     override function update(dt : Float) 
@@ -80,7 +105,7 @@ class GameScene extends Scene
         gameTiles = [];
         tileStates = [];
         gridHolder = new Object(scroller);
-        gridHolder.setPosition(-100, -100);
+        gridHolder.setPosition(-20, -80);
 
         var pixels : Pixels = level.getTexture().capturePixels();
 
@@ -95,9 +120,28 @@ class GameScene extends Scene
                 tileStates[x + gridWidth * y] = ColorCoding.getStateFromColor(pixels.getPixel(x, y));
             }
         }
+
+        currentEffect = None;
     }
 
-    function moveFlower(dirX : Int, dirY : Int)
+    public function moveFlowerDir(dir : Int)
+    {
+        switch(dir)
+        {
+            case 1 : 
+                moveFlower(0, -1);
+            case 5 : 
+                moveFlower(1, 0);
+            case 9 : 
+                moveFlower(-1, 0);
+            case 13 : 
+                moveFlower(0, 1);
+            default :
+                return;
+        }
+    }
+
+    public function moveFlower(dirX : Int, dirY : Int)
     {
         var newX : Int = Std.int(currentPosition.x) + dirX;
         var newY : Int = Std.int(currentPosition.y) + dirY;
@@ -121,7 +165,7 @@ class GameScene extends Scene
         setNewTile();
     }
 
-    function getGameTile(x : Int, y : Int) : GameTile
+    public function getGameTile(x : Int, y : Int) : GameTile
     {
         if(x < gridWidth && x >= 0 && y < gridHeight && y >= 0)
             return gameTiles[x + gridWidth * y];
@@ -150,6 +194,7 @@ class GameScene extends Scene
             currentDirection = 1;
 
         currentPosition = new Vector2(currentPosition.x + dirX, currentPosition.y + dirY);
+        currentFlower.grow(currentPosition, currentDirection);
     }
 
     function setOldTile(oldDir : Int, oldPosition : Vector2)
@@ -218,6 +263,36 @@ class GameScene extends Scene
         getGameTile(Std.int(currentPosition.x), Std.int(currentPosition.y)).changeTile(currentFlower.tiles[currentDirection - 1]);
         tileStates[Std.int(currentPosition.x) + gridWidth * Std.int(currentPosition.y)] = Flower;
     }
+
+    public function triggerEffect()
+    {
+        switch(currentEffect)
+        {
+            case None :
+                currentFlower.doNothing();
+            case Water :
+                currentFlower.applyWater();
+            case Earth :
+                currentFlower.applyEarth();
+            case Wind :
+                currentFlower.applyWind();
+            case Fire :
+                currentFlower.applyFire();
+        }
+    }
+
+    public function selectEffect(effect : Effect)
+    {
+        currentEffect = effect;
+
+        for(b in effectButtons)
+        {
+            if(b.effect != effect)
+                b.unSelect();
+        }
+
+        ui.needReflow = false;
+    }
 }
 
 enum TileState
@@ -226,4 +301,13 @@ enum TileState
     Obstable;
     Flower;
     Objective;
+}
+
+enum Effect
+{
+    None;
+    Water;
+    Earth;
+    Wind;
+    Fire;
 }
