@@ -48,7 +48,7 @@ class GameScene extends Scene
         sky.setPosition(-80, -height / 2);
 
         #if debug
-        var level : Tile = hxd.Res.images.level.Level.toTile();
+        var level : Tile = hxd.Res.images.level.test.toTile();
         #else
         var level : Tile = hxd.Res.images.level.Level.toTile();
         #end
