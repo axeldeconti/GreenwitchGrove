@@ -1,6 +1,6 @@
 -cp src
 -lib heaps
--lib hlsdl
+-lib hldx
 -lib castle
 -lib avenyrhEngine
 

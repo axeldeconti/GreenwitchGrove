@@ -14,6 +14,8 @@ class ColorCoding
                 return Obstable;
             case 0xFFfbf236 :
                 return Objective;
+            case 0xFFac3232 : 
+                return Empty;
             default :
                 return Empty;
         }

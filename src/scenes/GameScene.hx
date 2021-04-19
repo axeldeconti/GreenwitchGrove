@@ -279,6 +279,8 @@ class GameScene extends Scene
             case Fire :
                 currentFlower.applyFire();
         }
+
+        //Unselect current button
     }
 
     public function selectEffect(effect : Effect)
