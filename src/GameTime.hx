@@ -12,7 +12,7 @@ class GameTime extends Process
     var bg : Bitmap;
     var border : Bitmap;
 
-    var speedMultiplier : Float = 20;
+    var loopTime : Float = 6;
     var currentTime : Float;
     var isDaytime : Bool;
 
@@ -44,9 +44,9 @@ class GameTime extends Process
     {
         super.update(dt);
 
-        currentTime -= dt * speedMultiplier;
+        currentTime -= dt;
 
-        var angle : Float = AMath.toRad(currentTime);
+        var angle : Float = 2 * AMath.PI * currentTime / loopTime;
         var degAngle : Float = AMath.toDeg(angle) % 360;
 
         bg.rotation = angle;
