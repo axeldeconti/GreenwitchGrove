@@ -88,7 +88,7 @@ class Armoise extends Flower
         {
             //Remove current
             var currentPos : Vector2 = gamesTiles.pop();
-            scene.getGameTile(Std.int(currentPos.x), Std.int(currentPos.y)).changeTile(null);
+            scene.getGameTile(Std.int(currentPos.x), Std.int(currentPos.y)).changeGameTile(null);
             scene.tileStates[Std.int(currentPos.x) + scene.gridWidth * Std.int(currentPos.y)] = Empty;
             directions.pop();
 

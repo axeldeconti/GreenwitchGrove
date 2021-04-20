@@ -13,5 +13,6 @@ class MainMenu extends Scene
     override function added() 
     {
         Engine.instance.addScene(new GameScene());
+        //Engine.instance.addScene(new TestScene());
     }
 }
