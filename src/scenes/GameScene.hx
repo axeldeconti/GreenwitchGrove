@@ -64,7 +64,7 @@ class GameScene extends Scene
         setNewTile();
         currentFlower.grow(currentPosition, currentDirection);
 
-        var gameTime = new GameTime(this);
+        new GameTime(this);
 
         //Buttons flow
         buttonFlow = new Flow(ui);
@@ -115,7 +115,7 @@ class GameScene extends Scene
             {
                 var gt = new GameTile(gridHolder, x, y);
                 gameTiles[x + gridWidth * y] = gt;
-                gt.changeTile(Tile.fromColor(pixels.getPixel(x, y), 16, 16));
+                gt.changeGameTile(ColorCoding.getTileFromColor(pixels.getPixel(x, y)), false);
 
                 tileStates[x + gridWidth * y] = ColorCoding.getStateFromColor(pixels.getPixel(x, y));
             }
@@ -255,12 +255,12 @@ class GameScene extends Scene
                 return;
         }
 
-        getGameTile(Std.int(oldPosition.x), Std.int(oldPosition.y)).changeTile(currentFlower.tiles[i - 1]);
+        getGameTile(Std.int(oldPosition.x), Std.int(oldPosition.y)).changeGameTile(currentFlower.tiles[i - 1]);
     }
 
     function setNewTile()
     {
-        getGameTile(Std.int(currentPosition.x), Std.int(currentPosition.y)).changeTile(currentFlower.tiles[currentDirection - 1]);
+        getGameTile(Std.int(currentPosition.x), Std.int(currentPosition.y)).changeGameTile(currentFlower.tiles[currentDirection - 1]);
         tileStates[Std.int(currentPosition.x) + gridWidth * Std.int(currentPosition.y)] = Flower;
     }
 
