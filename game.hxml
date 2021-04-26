@@ -1,7 +1,6 @@
 -cp src
 -lib heaps
 -lib hldx
--lib castle
 -lib avenyrhEngine
 
 -D windowFixed=1
