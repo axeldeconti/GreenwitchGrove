@@ -18,7 +18,7 @@ class GameButton extends Flow
 
     var offTile : Tile;
 
-    public var isSelected : Bool;
+    public var isSelected (default, set) : Bool;
 
     override public function new(parent : Object, scene : GameScene, effect : Effect) 
     {
@@ -78,6 +78,20 @@ class GameButton extends Flow
         else
         {
             isSelected = true;
+        }
+    }
+
+    public function unSelect()
+    {
+        isSelected = false;
+    }
+
+    function set_isSelected(v : Bool) : Bool
+    {
+        isSelected = v;
+
+        if(isSelected)
+        {
             bitmap.tile = onTile;
             scene.selectEffect(effect);
 
@@ -87,21 +101,21 @@ class GameButton extends Flow
                 scene.windDirection = v ? 1 : -1;
             }
         }
-    }
-
-    public function unSelect()
-    {
-        if(effect == Wind)
-        {
-            var v : Bool = bitmap.tile.xFlip;
-            bitmap.tile = offTile;
-            bitmap.tile.xFlip = v;
-            bitmap.tile.dx = 0;
-        }
         else 
         {
-            bitmap.tile = offTile;
+            if(effect == Wind)
+            {
+                var v : Bool = bitmap.tile.xFlip;
+                bitmap.tile = offTile;
+                bitmap.tile.xFlip = v;
+                bitmap.tile.dx = 0;
+            }
+            else 
+            {
+                bitmap.tile = offTile;
+            }
         }
-        isSelected = false;
+
+        return isSelected;
     }
 }

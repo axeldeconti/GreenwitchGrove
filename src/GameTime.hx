@@ -1,3 +1,4 @@
+import avenyrh.engine.Inspector;
 import avenyrh.AMath;
 import avenyrh.engine.Process;
 import h2d.Object;
@@ -36,7 +37,7 @@ class GameTime extends Process
         border.tile.dx = -32;
         border.tile.dy = -32;
 
-        currentTime = loopTime / 4;
+        currentTime = -loopTime / 4;
         isDaytime = true;
     }
 
@@ -44,9 +45,9 @@ class GameTime extends Process
     {
         super.update(dt);
 
-        currentTime -= dt;
+        currentTime += dt;
 
-        var angle : Float = 2 * AMath.PI * currentTime / loopTime;
+        var angle : Float = -2 * AMath.PI * currentTime / loopTime;
         var degAngle : Float = AMath.toDeg(angle) % 360;
 
         bg.rotation = angle;
@@ -54,13 +55,28 @@ class GameTime extends Process
         if(isDaytime && degAngle < -90 && degAngle > -270)
         {
             isDaytime = false;
-            scene.triggerEffect();
             trace("Night time");
         }
         else if(!isDaytime && degAngle < -270)
         {
             isDaytime = true;
+            scene.triggerEffect();
             trace("Day time");
         }
+    }
+
+    override function drawInfo() 
+    {
+        super.drawInfo();
+
+        var lt : Array<Float> = [loopTime];
+        Inspector.dragFields("Loop time", uID, lt, "%.1f");
+        loopTime = lt[0];
+
+        var ct : Array<Float> = [currentTime];
+        Inspector.dragFields("Current time", uID, ct);
+        currentTime = ct[0];
+
+        isDaytime = Inspector.checkbox("Is Daytime", uID, isDaytime);
     }
 }

@@ -53,6 +53,9 @@ class GameScene extends Scene
         var level : Tile = hxd.Res.images.level.Level.toTile();
         #end
 
+        ColorCoding.groundTiles = hxd.Res.images.groundTile.toTile().split(15);
+        ColorCoding.junkTiles = hxd.Res.images.junkTile.toTile().split(15);
+
         buildLevel(level);
 
         armoise = new Armoise(this, hxd.Res.images.Armoise.toTile());
@@ -81,6 +84,9 @@ class GameScene extends Scene
         effectButtons.push(new GameButton(buttonFlow, this, Earth));
         effectButtons.push(new GameButton(buttonFlow, this, Wind));
         effectButtons.push(new GameButton(buttonFlow, this, Fire));
+        effectButtons[0].isSelected = true;
+        buttonFlow.debug = true;
+        buttonFlow.debug = false;//Don't know why it helps !!!
     }
 
     override function update(dt : Float) 
@@ -115,7 +121,7 @@ class GameScene extends Scene
             {
                 var gt = new GameTile(gridHolder, x, y);
                 gameTiles[x + gridWidth * y] = gt;
-                gt.changeGameTile(ColorCoding.getTileFromColor(pixels.getPixel(x, y)), false);
+                gt.changeGameTile(ColorCoding.getTileFromColor(pixels, x, y), false);
 
                 tileStates[x + gridWidth * y] = ColorCoding.getStateFromColor(pixels.getPixel(x, y));
             }
@@ -281,6 +287,13 @@ class GameScene extends Scene
         }
 
         //Unselect current button
+        for(b in effectButtons)
+        {
+            if(b.isSelected)
+                b.isSelected = false;
+        }
+
+        effectButtons[0].isSelected = true;
     }
 
     public function selectEffect(effect : Effect)
@@ -289,8 +302,8 @@ class GameScene extends Scene
 
         for(b in effectButtons)
         {
-            if(b.effect != effect)
-                b.unSelect();
+            if(b.effect != effect && b.isSelected)
+                b.isSelected = false;
         }
 
         ui.needReflow = false;
