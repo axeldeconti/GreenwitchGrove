@@ -13,9 +13,11 @@ class GameTime extends Process
     var bg : Bitmap;
     var border : Bitmap;
 
-    var loopTime : Float = 10;
+    public static var loopTime : Float = 10;
     var currentTime : Float;
     var isDaytime : Bool;
+
+    var started : Bool = false;
 
     public override function new(scene : GameScene)
     {
@@ -26,8 +28,6 @@ class GameTime extends Process
         holder = new Object(scene.ui);
         holder.scale(2);
         scene.ui.getProperties(holder).align(Top, Left);
-        scene.ui.getProperties(holder).offsetX = 100;
-        scene.ui.getProperties(holder).offsetY = 100;
         
         bg = new Bitmap(hxd.Res.images.GameTimeBg.toTile(), holder);
         bg.tile.dx = -32;
@@ -41,9 +41,18 @@ class GameTime extends Process
         isDaytime = true;
     }
 
+    function start()
+    {
+        scene.ui.getProperties(holder).offsetX = 310;
+        scene.ui.getProperties(holder).offsetY = 190;
+    }
+
     override function update(dt:Float) 
     {
         super.update(dt);
+
+        if(!started)
+            start();
 
         currentTime += dt;
 
@@ -78,5 +87,10 @@ class GameTime extends Process
         currentTime = ct[0];
 
         isDaytime = Inspector.checkbox("Is Daytime", uID, isDaytime);
+
+        var pos : Array<Int> = [scene.ui.getProperties(holder).offsetX, scene.ui.getProperties(holder).offsetY];
+        Inspector.dragFields("Position", uID, pos, 1);
+        scene.ui.getProperties(holder).offsetX = pos[0];
+        scene.ui.getProperties(holder).offsetY = pos[1];
     }
 }

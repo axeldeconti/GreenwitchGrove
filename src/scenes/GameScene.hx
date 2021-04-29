@@ -1,5 +1,6 @@
 package scenes;
 
+import animators.*;
 import avenyrh.Color;
 import h2d.Flow;
 import flowers.*;
@@ -29,10 +30,11 @@ class GameScene extends Scene
     public var currentDirection : Int;
     public var windDirection : Int;
 
-    var sky : Bitmap;
+    var bg : GameObject;
+    var frame : GameObject;
 
     var currentEffect : Effect;
-    var buttonFlow : Flow;
+    var buttonHolder : ButtonHolder;
     var effectButtons : Array<GameButton>;
 
     public function new() 
@@ -44,8 +46,13 @@ class GameScene extends Scene
     {
         camera.zoom = 3;
 
-        sky = new Bitmap(Tile.fromColor(0xFF5fcde4, 300, height), scroller);
-        sky.setPosition(-80, -height / 2);
+        bg = new GameObject("Background", scroller, 0);
+        bg.setPosition(48.8, 0.8);
+        bg.addComponent(new BGAnimator(bg, "BgAnimator"));
+
+        frame = new GameObject("Frame", scroller, 1);
+        frame.setPosition(0, 94);
+        frame.addComponent(new FrameAnimator(frame, "FrameAnimator"));
 
         #if debug
         var level : Tile = hxd.Res.images.level.test.toTile();
@@ -68,25 +75,22 @@ class GameScene extends Scene
         currentFlower.grow(currentPosition, currentDirection);
 
         new GameTime(this);
-
-        //Buttons flow
-        buttonFlow = new Flow(ui);
-        ui.getProperties(buttonFlow).align(Middle, Left);
-        ui.getProperties(buttonFlow).offsetX = 10;
-        ui.getProperties(buttonFlow).offsetY = 40;
-        buttonFlow.layout = Vertical;
-        buttonFlow.verticalSpacing = 10;
-        buttonFlow.backgroundTile = Tile.fromColor(Color.iBROWN);
         
+        buttonHolder = new ButtonHolder(scroller);
+        buttonHolder.changeTile(Tile.fromColor(Color.rgbaToInt({r : 0, g : 0, b : 0, a : 0})));
+        buttonHolder.setPosition(-120, 30);
         effectButtons = [];
-        effectButtons.push(new GameButton(buttonFlow, this, None));
-        effectButtons.push(new GameButton(buttonFlow, this, Water));
-        effectButtons.push(new GameButton(buttonFlow, this, Earth));
-        effectButtons.push(new GameButton(buttonFlow, this, Wind));
-        effectButtons.push(new GameButton(buttonFlow, this, Fire));
+        effectButtons.push(new GameButton(buttonHolder, this, None));
+        effectButtons.push(new GameButton(buttonHolder, this, Water));
+        effectButtons.push(new GameButton(buttonHolder, this, Earth));
+        effectButtons.push(new GameButton(buttonHolder, this, Wind));
+        effectButtons.push(new GameButton(buttonHolder, this, Fire));
         effectButtons[0].isSelected = true;
-        buttonFlow.debug = true;
-        buttonFlow.debug = false;//Don't know why it helps !!!
+        buttonHolder.getChildAt(0).setPosition(1.7, -23);
+        buttonHolder.getChildAt(1).setPosition(-32.5, -7.6);
+        buttonHolder.getChildAt(2).setPosition(-18, 22.6);
+        buttonHolder.getChildAt(3).setPosition(18, 22.6);
+        buttonHolder.getChildAt(4).setPosition(31, -7.6);
     }
 
     override function update(dt : Float) 
@@ -111,7 +115,7 @@ class GameScene extends Scene
         gameTiles = [];
         tileStates = [];
         gridHolder = new Object(scroller);
-        gridHolder.setPosition(-20, -80);
+        gridHolder.setPosition(-39.4, -87);
 
         var pixels : Pixels = level.getTexture().capturePixels();
 

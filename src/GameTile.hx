@@ -3,7 +3,6 @@ import avenyrh.gameObject.ParticleComponent;
 import avenyrh.AMath;
 import avenyrh.Color;
 import h2d.Tile;
-import h2d.Interactive;
 import h2d.Object;
 import avenyrh.gameObject.GameObject;
 

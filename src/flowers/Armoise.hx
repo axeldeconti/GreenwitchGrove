@@ -18,17 +18,18 @@ class Armoise extends Flower
     {
         didNothingCount++;
 
-        if(didNothingCount >= countToPlow)
+        if(didNothingCount >= countToPlow && scene.currentDirection == 1)
         {
             didNothingCount = 0;
 
             //Plow
-            if(scene.currentDirection == 1)
-            {
-                //Go left or right
-                scene.moveFlower(scene.windDirection, 0);
-            }
-            else if(scene.currentDirection == 5 || scene.currentDirection == 9)
+            //Go left or right
+            scene.moveFlower(scene.windDirection, 0);
+        }
+        else
+        {
+            //Continu growing
+            if(scene.currentDirection == 5 || scene.currentDirection == 9)
             {
                 //Go down
                 scene.moveFlower(0, 1);
@@ -38,11 +39,6 @@ class Armoise extends Flower
                 //Continu going down
                 scene.moveFlowerDir(scene.currentDirection);
             }
-        }
-        else
-        {
-            //Continu growing
-            scene.moveFlowerDir(scene.currentDirection);
         }
     }
 
