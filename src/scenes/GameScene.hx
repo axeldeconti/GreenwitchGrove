@@ -2,9 +2,7 @@ package scenes;
 
 import animators.*;
 import avenyrh.Color;
-import h2d.Flow;
 import flowers.*;
-import h2d.Bitmap;
 import avenyrh.engine.Engine;
 import avenyrh.InputManager;
 import avenyrh.Vector2;
@@ -86,11 +84,11 @@ class GameScene extends Scene
         effectButtons.push(new GameButton(buttonHolder, this, Wind));
         effectButtons.push(new GameButton(buttonHolder, this, Fire));
         effectButtons[0].isSelected = true;
-        buttonHolder.getChildAt(0).setPosition(1.7, -23);
-        buttonHolder.getChildAt(1).setPosition(-32.5, -7.6);
-        buttonHolder.getChildAt(2).setPosition(-18, 22.6);
-        buttonHolder.getChildAt(3).setPosition(18, 22.6);
-        buttonHolder.getChildAt(4).setPosition(31, -7.6);
+        effectButtons[0].setPosition(1.7, -23);
+        effectButtons[1].setPosition(-32.5, -7.6);
+        effectButtons[2].setPosition(-18, 22.6);
+        effectButtons[3].setPosition(18, 22.6);
+        effectButtons[4].setPosition(31, -7.6);
     }
 
     override function update(dt : Float) 
@@ -128,6 +126,9 @@ class GameScene extends Scene
                 gt.changeGameTile(ColorCoding.getTileFromColor(pixels, x, y), false);
 
                 tileStates[x + gridWidth * y] = ColorCoding.getStateFromColor(pixels.getPixel(x, y));
+
+                if(tileStates[x + gridWidth * y] == Objective)
+                    gt.addComponent(new GoalAnimator(gt, "GoalAnimator"));
             }
         }
 

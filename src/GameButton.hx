@@ -55,7 +55,7 @@ class GameButton extends Flow
 
         isSelected = false;
 
-        var inter : Interactive = new Interactive(64, 64, bitmap);
+        var inter : Interactive = new Interactive(16, 16, bitmap);
         inter.onPush = onPushCb;
     }
 
