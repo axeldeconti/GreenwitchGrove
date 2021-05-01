@@ -64,6 +64,7 @@ class GameTime extends Process
         if(isDaytime && degAngle < -90 && degAngle > -270)
         {
             isDaytime = false;
+            scene.lockButtons();
             trace("Night time");
         }
         else if(!isDaytime && degAngle < -270)
@@ -72,6 +73,12 @@ class GameTime extends Process
             scene.triggerEffect();
             trace("Day time");
         }
+    }
+
+    public function reset()
+    {
+        currentTime = -loopTime / 4;
+        isDaytime = true;
     }
 
     override function drawInfo() 

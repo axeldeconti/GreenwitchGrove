@@ -16,11 +16,16 @@ class GameScene extends Scene
 {
     var s2d : h2d.Scene;
 
+    var gameTime : GameTime;
+
     public var gridWidth : Int = 12;
     public var gridHeight : Int = 12;
     var gameTiles : Array<GameTile>;
     public var tileStates : Array<TileState>;
     var gridHolder : Object;
+
+    var levels : Array<Tile>;
+    var currentLevel : Int;
 
     var currentFlower : Flower;
     var armoise : Armoise;
@@ -44,6 +49,8 @@ class GameScene extends Scene
     {
         camera.zoom = 3;
 
+        gameTime = new GameTime(this);
+
         bg = new GameObject("Background", scroller, 0);
         bg.setPosition(48.8, 0.8);
         bg.addComponent(new BGAnimator(bg, "BgAnimator"));
@@ -52,15 +59,26 @@ class GameScene extends Scene
         frame.setPosition(0, 94);
         frame.addComponent(new FrameAnimator(frame, "FrameAnimator"));
 
+        //Get levels
+        levels = [];
+        var t : Tile = hxd.Res.images.level.Levels.toTile();
+        var nb : Int = Std.int(t.width / 12);
+        for(i in 0 ... nb)
+            levels.push(t.sub(12 * i, 0, 12, 12));
+
         #if debug
         var level : Tile = hxd.Res.images.level.test.toTile();
         #else
-        var level : Tile = hxd.Res.images.level.Level.toTile();
+        var level : Tile = levels[0];
+        currentLevel = 0;
         #end
 
         ColorCoding.groundTiles = hxd.Res.images.groundTile.toTile().split(15);
         ColorCoding.junkTiles = hxd.Res.images.junkTile.toTile().split(15);
 
+        //Build level
+        gridHolder = new Object(scroller);
+        gridHolder.setPosition(-39.4, -87);
         buildLevel(level);
 
         armoise = new Armoise(this, hxd.Res.images.Armoise.toTile());
@@ -71,8 +89,6 @@ class GameScene extends Scene
         currentPosition = new Vector2(5, 10);
         setNewTile();
         currentFlower.grow(currentPosition, currentDirection);
-
-        new GameTime(this);
         
         buttonHolder = new ButtonHolder(scroller);
         buttonHolder.changeTile(Tile.fromColor(Color.rgbaToInt({r : 0, g : 0, b : 0, a : 0})));
@@ -84,11 +100,11 @@ class GameScene extends Scene
         effectButtons.push(new GameButton(buttonHolder, this, Wind));
         effectButtons.push(new GameButton(buttonHolder, this, Fire));
         effectButtons[0].isSelected = true;
-        effectButtons[0].setPosition(1.7, -23);
+        effectButtons[0].setPosition(-18, 22.6);
         effectButtons[1].setPosition(-32.5, -7.6);
-        effectButtons[2].setPosition(-18, 22.6);
-        effectButtons[3].setPosition(18, 22.6);
-        effectButtons[4].setPosition(31, -7.6);
+        effectButtons[2].setPosition(1.7, -23);
+        effectButtons[3].setPosition(31, -7.6);
+        effectButtons[4].setPosition(18, 22.6);
     }
 
     override function update(dt : Float) 
@@ -107,13 +123,11 @@ class GameScene extends Scene
 
     function buildLevel(level : Tile)
     {
-        if(gridHolder != null)
-            gridHolder.remove();
+        gridHolder.removeChildren();
+        gameTime.reset();
 
         gameTiles = [];
         tileStates = [];
-        gridHolder = new Object(scroller);
-        gridHolder.setPosition(-39.4, -87);
 
         var pixels : Pixels = level.getTexture().capturePixels();
 
@@ -166,7 +180,19 @@ class GameScene extends Scene
         if(nextTileState == Obstable || nextTileState == Flower)
             return;
         else if(nextTileState == Objective)
-            Engine.instance.addScene(new GameScene());
+        {
+            //Go to next level
+            currentLevel++;
+            if(currentLevel >= levels.length)
+            {
+                //Finish the game
+            }
+            else 
+            {
+                //Build next level
+                buildLevel(levels[currentLevel]);
+            }
+        }
  
         var oldDir : Int = currentDirection;
         var oldPosition : Vector2 = currentPosition;
@@ -275,6 +301,12 @@ class GameScene extends Scene
         tileStates[Std.int(currentPosition.x) + gridWidth * Std.int(currentPosition.y)] = Flower;
     }
 
+    public function lockButtons()
+    {
+        for(b in effectButtons)
+            b.lock(true);
+    }
+
     public function triggerEffect()
     {
         switch(currentEffect)
@@ -293,10 +325,7 @@ class GameScene extends Scene
 
         //Unselect current button
         for(b in effectButtons)
-        {
-            if(b.isSelected)
-                b.isSelected = false;
-        }
+            b.lock(false);
 
         effectButtons[0].isSelected = true;
     }

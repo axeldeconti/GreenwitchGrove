@@ -20,6 +20,8 @@ class GameButton extends Flow
 
     public var isSelected (default, set) : Bool;
 
+    var isLocked : Bool;
+
     override public function new(parent : Object, scene : GameScene, effect : Effect) 
     {
         super(parent);
@@ -32,8 +34,8 @@ class GameButton extends Flow
         switch(effect)
         {
             case Wind :
-                offTile = tiles[0];
-                onTile = tiles[1];
+                offTile = tiles[6];
+                onTile = tiles[7];
             case Water :
                 offTile = tiles[2];
                 onTile = tiles[3];
@@ -41,8 +43,8 @@ class GameButton extends Flow
                 offTile = tiles[4];
                 onTile = tiles[5];
             case Earth :
-                offTile = tiles[6];
-                onTile = tiles[7];
+                offTile = tiles[0];
+                onTile = tiles[1];
             case None :
                 offTile = tiles[8];
                 onTile = tiles[9];
@@ -54,6 +56,7 @@ class GameButton extends Flow
         getProperties(bitmap).align(Middle, Right);
 
         isSelected = false;
+        isLocked = false;
 
         var inter : Interactive = new Interactive(16, 16, bitmap);
         inter.onPush = onPushCb;
@@ -61,6 +64,9 @@ class GameButton extends Flow
 
     function onPushCb(e : hxd.Event)
     {
+        if(isLocked)
+            return;
+
         if(isSelected)
         {
             if(effect == Wind)
@@ -78,6 +84,26 @@ class GameButton extends Flow
         else
         {
             isSelected = true;
+        }
+    }
+
+    public function lock(lock : Bool)
+    {
+        isLocked = lock;
+
+        if(lock)
+        {
+            bitmap.tile = onTile;
+
+            if(effect == Wind)
+            {
+                var v : Bool = !bitmap.tile.xFlip;
+                scene.windDirection = v ? 1 : -1;
+            }
+        }
+        else 
+        {
+            isSelected = false;
         }
     }
 
