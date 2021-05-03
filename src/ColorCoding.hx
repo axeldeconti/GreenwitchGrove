@@ -21,7 +21,7 @@ class ColorCoding
             case 0xFFfbf236 ://Yellow
                 return Objective;
             case 0xFFac3232 ://Red
-                return Empty;
+                return Start;
             default :
                 return Empty;
         }

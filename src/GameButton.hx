@@ -1,3 +1,4 @@
+import avenyrh.Color;
 import scenes.GameScene;
 import h2d.Bitmap;
 import h2d.Flow;
@@ -58,7 +59,7 @@ class GameButton extends Flow
         isSelected = false;
         isLocked = false;
 
-        var inter : Interactive = new Interactive(16, 16, bitmap);
+        var inter : Interactive = new Interactive(bitmap.tile.width, bitmap.tile.height, bitmap);
         inter.onPush = onPushCb;
     }
 
@@ -69,17 +70,7 @@ class GameButton extends Flow
 
         if(isSelected)
         {
-            if(effect == Wind)
-            {
-                var v : Bool = !bitmap.tile.xFlip;
-                bitmap.tile.xFlip = v;
-                bitmap.tile.dx = 0;
-                scene.windDirection = v ? -1 : 1;
-            }
-            else
-            {
 
-            }
         }
         else
         {
@@ -94,12 +85,6 @@ class GameButton extends Flow
         if(lock)
         {
             bitmap.tile = onTile;
-
-            if(effect == Wind)
-            {
-                var v : Bool = !bitmap.tile.xFlip;
-                scene.windDirection = v ? 1 : -1;
-            }
         }
         else 
         {
@@ -120,26 +105,10 @@ class GameButton extends Flow
         {
             bitmap.tile = onTile;
             scene.selectEffect(effect);
-
-            if(effect == Wind)
-            {
-                var v : Bool = !bitmap.tile.xFlip;
-                scene.windDirection = v ? 1 : -1;
-            }
         }
         else 
         {
-            if(effect == Wind)
-            {
-                var v : Bool = bitmap.tile.xFlip;
-                bitmap.tile = offTile;
-                bitmap.tile.xFlip = v;
-                bitmap.tile.dx = 0;
-            }
-            else 
-            {
-                bitmap.tile = offTile;
-            }
+            bitmap.tile = offTile;
         }
 
         return isSelected;

@@ -33,6 +33,9 @@ class GameScene extends Scene
     public var currentDirection : Int;
     public var windDirection : Int;
 
+    var resetRib : Ribbon;
+    var windRib : Ribbon;
+
     var bg : GameObject;
     var frame : GameObject;
 
@@ -59,6 +62,16 @@ class GameScene extends Scene
         frame.setPosition(0, 94);
         frame.addComponent(new FrameAnimator(frame, "FrameAnimator"));
 
+        var ribs : Array<Tile> = hxd.Res.images.ribbons.toTile().split(2);
+        windRib = new Ribbon(frame, "WindRibbon", ribs[0], () -> 
+        {
+            windDirection *= -1; 
+            windRib.scaleX = windDirection;
+        });
+        windRib.setPosition(-91.5, -43);
+        resetRib = new Ribbon(frame, "ResetRibbon", ribs[1], () -> buildLevel(levels[currentLevel]));
+        resetRib.setPosition(-127.7, -43);
+
         //Get levels
         levels = [];
         var t : Tile = hxd.Res.images.level.Levels.toTile();
@@ -76,23 +89,18 @@ class GameScene extends Scene
         ColorCoding.groundTiles = hxd.Res.images.groundTile.toTile().split(15);
         ColorCoding.junkTiles = hxd.Res.images.junkTile.toTile().split(15);
 
+        armoise = new Armoise(this, hxd.Res.images.Armoise.toTile());
+        currentFlower = armoise;
+
         //Build level
         gridHolder = new Object(scroller);
         gridHolder.setPosition(-39.4, -87);
         buildLevel(level);
-
-        armoise = new Armoise(this, hxd.Res.images.Armoise.toTile());
-        currentFlower = armoise;
-
-        currentDirection = 1;
         windDirection = 1;
-        currentPosition = new Vector2(5, 10);
-        setNewTile();
-        currentFlower.grow(currentPosition, currentDirection);
         
         buttonHolder = new ButtonHolder(scroller);
         buttonHolder.changeTile(Tile.fromColor(Color.rgbaToInt({r : 0, g : 0, b : 0, a : 0})));
-        buttonHolder.setPosition(-120, 30);
+        buttonHolder.setPosition(-120, 18);
         effectButtons = [];
         effectButtons.push(new GameButton(buttonHolder, this, None));
         effectButtons.push(new GameButton(buttonHolder, this, Water));
@@ -143,10 +151,15 @@ class GameScene extends Scene
 
                 if(tileStates[x + gridWidth * y] == Objective)
                     gt.addComponent(new GoalAnimator(gt, "GoalAnimator"));
+                else if(tileStates[x + gridWidth * y] == Start)
+                    currentPosition = new Vector2(x, y);
             }
         }
 
         currentEffect = None;
+        currentDirection = 1;
+        setNewTile();
+        currentFlower.grow(currentPosition, currentDirection);
     }
 
     public function moveFlowerDir(dir : Int)
@@ -193,7 +206,7 @@ class GameScene extends Scene
                 buildLevel(levels[currentLevel]);
             }
         }
- 
+
         var oldDir : Int = currentDirection;
         var oldPosition : Vector2 = currentPosition;
         
@@ -350,6 +363,7 @@ enum TileState
     Obstable;
     Flower;
     Objective;
+    Start;
 }
 
 enum Effect
