@@ -33,15 +33,15 @@ class GameScene extends Scene
     public var currentDirection : Int;
     public var windDirection : Int;
 
-    var resetRib : Ribbon;
-    var windRib : Ribbon;
-
     var bg : GameObject;
     var frame : GameObject;
 
     var currentEffect : Effect;
     var buttonHolder : ButtonHolder;
     var effectButtons : Array<GameButton>;
+    var resetRib : Ribbon;
+    var windRib : Ribbon;
+
 
     public function new() 
     {
@@ -61,16 +61,6 @@ class GameScene extends Scene
         frame = new GameObject("Frame", scroller, 1);
         frame.setPosition(0, 94);
         frame.addComponent(new FrameAnimator(frame, "FrameAnimator"));
-
-        var ribs : Array<Tile> = hxd.Res.images.ribbons.toTile().split(2);
-        windRib = new Ribbon(frame, "WindRibbon", ribs[0], () -> 
-        {
-            windDirection *= -1; 
-            windRib.scaleX = windDirection;
-        });
-        windRib.setPosition(-91.5, -43);
-        resetRib = new Ribbon(frame, "ResetRibbon", ribs[1], () -> buildLevel(levels[currentLevel]));
-        resetRib.setPosition(-127.7, -43);
 
         //Get levels
         levels = [];
@@ -98,9 +88,20 @@ class GameScene extends Scene
         buildLevel(level);
         windDirection = 1;
         
+        //Ribbons
+        var ribs : Array<Tile> = hxd.Res.images.ribbons.toTile().split(2);
+        windRib = new Ribbon(frame, "WindRibbon", ribs[0], () -> 
+        {
+            windDirection *= -1; 
+            windRib.tile.flipX();
+        });
+        windRib.setPosition(-91, -43);
+        resetRib = new Ribbon(frame, "ResetRibbon", ribs[1], () -> buildLevel(levels[currentLevel]));
+        resetRib.setPosition(-127.7, -43);
+
+        //Buttons
         buttonHolder = new ButtonHolder(scroller);
-        buttonHolder.changeTile(Tile.fromColor(Color.rgbaToInt({r : 0, g : 0, b : 0, a : 0})));
-        buttonHolder.setPosition(-120, 18);
+        buttonHolder.setPosition(-213, -122);
         effectButtons = [];
         effectButtons.push(new GameButton(buttonHolder, this, None));
         effectButtons.push(new GameButton(buttonHolder, this, Water));
@@ -108,11 +109,11 @@ class GameScene extends Scene
         effectButtons.push(new GameButton(buttonHolder, this, Wind));
         effectButtons.push(new GameButton(buttonHolder, this, Fire));
         effectButtons[0].isSelected = true;
-        effectButtons[0].setPosition(-18, 22.6);
-        effectButtons[1].setPosition(-32.5, -7.6);
-        effectButtons[2].setPosition(1.7, -23);
-        effectButtons[3].setPosition(31, -7.6);
-        effectButtons[4].setPosition(18, 22.6);
+        effectButtons[0].setPosition(75, 160);
+        effectButtons[1].setPosition(61, 130);
+        effectButtons[2].setPosition(94, 115);
+        effectButtons[3].setPosition(124, 130);
+        effectButtons[4].setPosition(111, 160);
     }
 
     override function update(dt : Float) 

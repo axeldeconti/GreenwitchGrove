@@ -7,6 +7,8 @@ class ButtonHolder extends GameObject
     override public function new(parent : Object) 
     {
         super("ButtonHolder", parent);
+
+        tile = hxd.Res.images.buttonPannel.toTile();
     }
 
     override function drawInfo() 
