@@ -1,4 +1,3 @@
-import avenyrh.Color;
 import scenes.GameScene;
 import h2d.Bitmap;
 import h2d.Flow;
@@ -75,6 +74,7 @@ class GameButton extends Flow
         else
         {
             isSelected = true;
+            AudioManager.playSfx(hxd.Res.sounds.Clic);
         }
     }
 

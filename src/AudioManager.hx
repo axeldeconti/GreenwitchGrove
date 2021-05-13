@@ -1,4 +1,3 @@
-import avenyrh.AMath;
 import hxd.res.Sound;
 
 class AudioManager 
@@ -30,19 +29,16 @@ class AudioManager
         sfxChanel.mute = sfxMute;
     }
 
-    //-------------------------------
-    //#region SFXs
-    //-------------------------------
-    // public static inline function getSFX_coin() : Sound
-    // {
-    //     return hxd.Res.load('sounds/sfx/coins/coin${AMath.irand(4)}.wav').toSound();
-    // }
+    public static function dispose()
+    {
+        if(musicChanel != null)
+            musicChanel.stop();
+        
+        if(sfxChanel != null)
+            sfxChanel.stop();
 
-    // public static inline function getSFX_footstep() : Sound
-    // {
-    //     return hxd.Res.load('sounds/sfx/footsteps/footstep${AMath.irand(2)}.wav').toSound();
-    // }
-    //#endregion
+        hxd.snd.Manager.get().dispose();
+    }
 
     //-------------------------------
     //#region Getters & Setters

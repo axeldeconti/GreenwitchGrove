@@ -1,5 +1,6 @@
 package scenes;
 
+import hxd.res.Sound;
 import animators.*;
 import avenyrh.Color;
 import flowers.*;
@@ -94,9 +95,14 @@ class GameScene extends Scene
         {
             windDirection *= -1; 
             windRib.tile.flipX();
+            AudioManager.playSfx(hxd.Res.sounds.Changement_Vent);
         });
         windRib.setPosition(-91, -43);
-        resetRib = new Ribbon(frame, "ResetRibbon", ribs[1], () -> buildLevel(levels[currentLevel]));
+        resetRib = new Ribbon(frame, "ResetRibbon", ribs[1], () -> 
+        {
+            buildLevel(levels[currentLevel]);
+            AudioManager.playSfx(hxd.Res.sounds.Reset);
+        });
         resetRib.setPosition(-127.7, -43);
 
         //Buttons
@@ -337,6 +343,8 @@ class GameScene extends Scene
                 currentFlower.applyFire();
         }
 
+        AudioManager.playSfx(getSFX_Effect());
+
         //Unselect current button
         for(b in effectButtons)
             b.lock(false);
@@ -355,6 +363,18 @@ class GameScene extends Scene
         }
 
         ui.needReflow = false;
+    }
+
+    function getSFX_Effect() : Sound
+    {
+        switch (currentEffect)
+        {
+            case None : return hxd.Res.sounds.Annuler;
+            case Water : return hxd.Res.sounds.Eau;
+            case Wind : return hxd.Res.sounds.Air;
+            case Earth : return hxd.Res.sounds.Terre;
+            case Fire : return hxd.Res.sounds.Feu;
+        }
     }
 }
 

@@ -28,7 +28,6 @@ class Boot extends hxd.App
         instance = this;
 
         //Pixel art settings
-        //s2d.scaleMode = LetterBox(Const.TARGET_WIDTH, Const.TARGET_HEIGHT, false);
         s2d.filter = new h2d.filter.ColorMatrix();
 
         avenyrhEngine = new Engine(s2d, engine);
@@ -69,14 +68,14 @@ class Boot extends hxd.App
 
     function onClose()
     {       
-        //AudioManager.dispose();
+        AudioManager.dispose();
 
         return true;
     }
 
     public function exit()
     {
-        //AudioManager.dispose();
+        AudioManager.dispose();
         hxd.System.exit();
     }
 }
