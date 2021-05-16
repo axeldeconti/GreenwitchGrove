@@ -43,7 +43,6 @@ class GameScene extends Scene
     var resetRib : Ribbon;
     var windRib : Ribbon;
 
-
     public function new() 
     {
         super("Game Scene");    
@@ -76,6 +75,8 @@ class GameScene extends Scene
         var level : Tile = levels[0];
         currentLevel = 0;
         #end
+
+        new Wand(scroller);
 
         ColorCoding.groundTiles = hxd.Res.images.groundTile.toTile().split(15);
         ColorCoding.junkTiles = hxd.Res.images.junkTile.toTile().split(15);
@@ -343,7 +344,7 @@ class GameScene extends Scene
                 currentFlower.applyFire();
         }
 
-        AudioManager.playSfx(getSFX_Effect());
+        //AudioManager.playSfx(getSFX_Effect());
 
         //Unselect current button
         for(b in effectButtons)
@@ -363,18 +364,6 @@ class GameScene extends Scene
         }
 
         ui.needReflow = false;
-    }
-
-    function getSFX_Effect() : Sound
-    {
-        switch (currentEffect)
-        {
-            case None : return hxd.Res.sounds.Annuler;
-            case Water : return hxd.Res.sounds.Eau;
-            case Wind : return hxd.Res.sounds.Air;
-            case Earth : return hxd.Res.sounds.Terre;
-            case Fire : return hxd.Res.sounds.Feu;
-        }
     }
 }
 

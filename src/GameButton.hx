@@ -1,3 +1,4 @@
+import hxd.res.Sound;
 import scenes.GameScene;
 import h2d.Bitmap;
 import h2d.Flow;
@@ -74,7 +75,7 @@ class GameButton extends Flow
         else
         {
             isSelected = true;
-            AudioManager.playSfx(hxd.Res.sounds.Clic);
+            AudioManager.playSfx(getSFX_Effect());
         }
     }
 
@@ -95,6 +96,18 @@ class GameButton extends Flow
     public function unSelect()
     {
         isSelected = false;
+    }
+
+    function getSFX_Effect() : Sound
+    {
+        switch (effect)
+        {
+            case None : return hxd.Res.sounds.Annuler;
+            case Water : return hxd.Res.sounds.Eau;
+            case Wind : return hxd.Res.sounds.Air;
+            case Earth : return hxd.Res.sounds.Terre;
+            case Fire : return hxd.Res.sounds.Feu;
+        }
     }
 
     function set_isSelected(v : Bool) : Bool
