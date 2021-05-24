@@ -1,3 +1,4 @@
+import avenyrh.engine.Engine;
 import avenyrh.Vector2;
 import avenyrh.engine.Process;
 import avenyrh.gameObject.ParticleComponent;
@@ -9,6 +10,7 @@ class Wand extends GameObject
 {
     var particles : ParticleComponent;
 
+    var zoom : Float;
 
     override public function new(parent : Object) 
     {
@@ -17,7 +19,9 @@ class Wand extends GameObject
         particles = cast addComponent(new ParticleComponent(this, "WandParticles", Texture.fromColor(0xFFf79518)));
         alpha = 0;
 
-        var newPos : Vector2 = new Vector2((Process.S2D.mouseX - 1280 / 2) / 3 + 8, (Process.S2D.mouseY - 720 / 2) / 3 + 8);
+        zoom = Engine.instance.currentScene.camera.zoom;
+
+        var newPos : Vector2 = new Vector2((Process.S2D.mouseX - 1280 / 2) / zoom + 8, (Process.S2D.mouseY - 720 / 2) / zoom + 8);
         setPosition(newPos.x, newPos.y);
     }
 
@@ -25,7 +29,7 @@ class Wand extends GameObject
     {
         super.postUpdate(dt);
 
-        var newPos : Vector2 = new Vector2((Process.S2D.mouseX - 1280 / 2) / 3 + 8, (Process.S2D.mouseY - 720 / 2) / 3 + 8);
+        var newPos : Vector2 = new Vector2((Process.S2D.mouseX - 1280 / 2) / zoom + 8, (Process.S2D.mouseY - 720 / 2) / zoom + 8);
         setPosition(newPos.x, newPos.y);
     }
 }

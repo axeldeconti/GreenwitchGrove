@@ -1,5 +1,7 @@
 package scenes;
 
+import avenyrh.imgui.ImGui;
+import avenyrh.engine.Inspector;
 import hxd.res.Sound;
 import animators.*;
 import avenyrh.Color;
@@ -73,8 +75,8 @@ class GameScene extends Scene
         var level : Tile = hxd.Res.images.level.test.toTile();
         #else
         var level : Tile = levels[0];
-        currentLevel = 0;
         #end
+        currentLevel = 0;
 
         new Wand(scroller);
 
@@ -127,6 +129,7 @@ class GameScene extends Scene
     {
         super.update(dt);
 
+        #if debug
         if(InputManager.getKeyDown("UpArrow"))
             moveFlower(0, -1);
         else if(InputManager.getKeyDown("DownArrow"))
@@ -135,6 +138,7 @@ class GameScene extends Scene
             moveFlower(-1, 0);
         else if(InputManager.getKeyDown("RightArrow"))
             moveFlower(1, 0);
+        #end
     }
 
     function buildLevel(level : Tile)
@@ -145,7 +149,7 @@ class GameScene extends Scene
         gameTiles = [];
         tileStates = [];
 
-        var pixels : Pixels = level.getTexture().capturePixels();
+        var pixels : Pixels = level.getTexture().capturePixels(h2d.col.IBounds.fromValues(currentLevel * 12, 0, 12, 12));
 
         for(x in 0 ... gridWidth)
         {
@@ -207,11 +211,13 @@ class GameScene extends Scene
             if(currentLevel >= levels.length)
             {
                 //Finish the game
+                Engine.instance.addScene(new MainMenu());
             }
             else 
             {
                 //Build next level
                 buildLevel(levels[currentLevel]);
+                return;
             }
         }
 
@@ -364,6 +370,18 @@ class GameScene extends Scene
         }
 
         ui.needReflow = false;
+    }
+
+    override function drawInfo() 
+    {
+        super.drawInfo();
+
+        var cl : Array<Int> = [currentLevel];
+        Inspector.dragFields("Current level", uID, cl, 0.1);
+        currentLevel = cl[0];
+
+        //ImGui.image(levels[currentLevel].getTexture().id, {x : 12, y : 12});
+        Inspector.image(levels[currentLevel]);
     }
 }
 

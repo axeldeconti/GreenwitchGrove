@@ -2,6 +2,7 @@
 -lib heaps
 -lib hldx
 -lib avenyrhEngine
+-lib echo
 
 -D windowFixed=1
 -D windowTitle=GreenwitchGrove
