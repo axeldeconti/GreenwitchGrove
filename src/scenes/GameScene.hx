@@ -387,17 +387,28 @@ class GameScene extends Scene
         {
             case None :
                 currentFlower.doNothing();
+                var a : Armoise = cast currentFlower;
+                if(a.didNothingCount > a.countToPlow)
+                    AudioManager.playSfx(hxd.Res.sounds.plant.POUSSE_EN_MANQUE_D_EAU);
+                else 
+                    AudioManager.playSfx(hxd.Res.sounds.plant.POUSSE_NORMALE_01);
             case Water :
+                var dir : Int = currentDirection;
                 currentFlower.applyWater();
+                if(dir != currentDirection)
+                    AudioManager.playSfx(hxd.Res.sounds.plant.POUSSE_Redresse_e_v2);
+                else 
+                    AudioManager.playSfx(hxd.Res.sounds.plant.POUSSE_NORMALE_01);
             case Earth :
                 currentFlower.applyEarth();
+                AudioManager.playSfx(hxd.Res.sounds.plant.POUSSE_ACC_L_R_E);
             case Wind :
                 currentFlower.applyWind();
+                AudioManager.playSfx(hxd.Res.sounds.plant.POUSSE_INFLUENC_E_PAR_LE_VENT);
             case Fire :
                 currentFlower.applyFire();
+                AudioManager.playSfx(hxd.Res.sounds.plant.POUSSE_INTERROMPUE);
         }
-
-        //AudioManager.playSfx(getSFX_Effect());
 
         //Unselect current button
         for(b in effectButtons)

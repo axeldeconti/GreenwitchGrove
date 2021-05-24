@@ -7,7 +7,7 @@ import h2d.Tile;
 class Armoise extends Flower
 {
     public var didNothingCount : Int;
-    var countToPlow : Int = 4;
+    public var countToPlow : Int = 4;
 
     override public function new(scene : GameScene, tile : Tile) 
     {
