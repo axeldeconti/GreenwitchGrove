@@ -13,7 +13,7 @@ class GameTime extends Process
     var bg : Bitmap;
     var border : Bitmap;
 
-    public static var loopTime : Float = 10;
+    public static var loopTime : Float = 20;
     var currentTime : Float;
     var isDaytime : Bool;
 
