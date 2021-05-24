@@ -21,7 +21,6 @@ class AudioManager
         if(musicChanel != null && musicChanel.sound != null)
         {
             t = musicChanel.position;
-            trace(t);
             musicChanel.stop();
         }
 

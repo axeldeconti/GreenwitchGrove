@@ -45,8 +45,8 @@ class Boot extends hxd.App
         super.update(dt);
 
         #if debug
-        if(InputManager.getKeyDown("Tab"))
-            exit();
+        // if(InputManager.getKeyDown("Tab"))
+        //     exit();
 
         if(InputManager.getKeyDown("P"))
         {

@@ -70,13 +70,11 @@ class GameTime extends Process
         {
             isDaytime = false;
             scene.lockButtons();
-            trace("Night time");
         }
         else if(!isDaytime && degAngle < -270)
         {
             isDaytime = true;
             scene.triggerEffect();
-            trace("Day time");
         }
     }
 

@@ -1,5 +1,8 @@
 package scenes;
 
+import avenyrh.ui.Button;
+import h2d.Bitmap;
+import h2d.HtmlText;
 import avenyrh.imgui.ImGui;
 import avenyrh.engine.Inspector;
 import hxd.res.Sound;
@@ -46,6 +49,9 @@ class GameScene extends Scene
     var resetRib : Ribbon;
     var windRib : Ribbon;
 
+    var tutoHolder : GameObject;
+    var tutoText : HtmlText;
+
     public function new() 
     {
         super("Game Scene");    
@@ -86,6 +92,28 @@ class GameScene extends Scene
 
         armoise = new Armoise(this, hxd.Res.images.Armoise.toTile());
         currentFlower = armoise;
+
+        //Tuto
+        tutoHolder = new GameObject("Tuto Holder", ui);
+        tutoHolder.scale(3);
+        ui.getProperties(tutoHolder).align(Bottom, Right);
+        tutoHolder.changeTile(Tile.fromColor(Color.iBLACK, Std.int(1280 / 3) + 2, Std.int(720 / 3), 0.8));
+        var b : Bitmap = new Bitmap(hxd.Res.images.textBoxWide.toTile(), tutoHolder);
+        b.setPosition(-162, -150);
+        tutoText = new HtmlText(hxd.res.DefaultFont.get(), b);
+        tutoText.setPosition(10, 40);
+        tutoText.textAlign = Left;
+        tutoText.text = "quoisehfpqsuihfgpquhrgoiusdhdfg^q";
+        var t : Tile = hxd.Res.images.OkButton.toTile().sub(0, 0, 32, 16);
+        var button : Button = new Button(tutoHolder, t.width, t.height);
+        button.setPosition(-16, -40);
+        button.useColor = false;
+        button.idle.customTile = t;
+        button.hover.customTile = hxd.Res.images.OkButton.toTile().sub(32, 0, 32, 16);
+        button.hold.customTile = t;
+        button.press.customTile = t;
+        button.onClick = (e) -> {gameTime.play = true; tutoHolder.visible = false;};
+        tutoHolder.visible = false;
 
         //Build level
         gridHolder = new Object(scroller);
@@ -164,6 +192,7 @@ class GameScene extends Scene
     {
         gridHolder.removeChildren();
         gameTime.reset();
+        currentFlower.gamesTiles = [];
 
         gameTiles = [];
         tileStates = [];
@@ -191,6 +220,13 @@ class GameScene extends Scene
         currentDirection = 1;
         setNewTile();
         currentFlower.grow(currentPosition, currentDirection);
+
+        if(TutoText.texts.exists(currentLevel + 1))
+        {
+            gameTime.play = false;
+            tutoHolder.visible = true;
+            tutoText.text = TutoText.texts[currentLevel + 1];
+        }
     }
 
     public function moveFlowerDir(dir : Int)

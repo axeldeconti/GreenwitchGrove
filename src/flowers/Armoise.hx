@@ -20,7 +20,7 @@ class Armoise extends Flower
 
         if(didNothingCount >= countToPlow && scene.currentDirection == 1)
         {
-            didNothingCount = 0;
+            //didNothingCount = 0;
 
             //Plow
             //Go left or right
@@ -82,6 +82,7 @@ class Armoise extends Flower
         //Change last
         if(gamesTiles.length > 1)
         {
+            trace('Fire ${gamesTiles.length}');
             //Remove current
             var currentPos : Vector2 = gamesTiles.pop();
             scene.getGameTile(Std.int(currentPos.x), Std.int(currentPos.y)).changeGameTile(null);
