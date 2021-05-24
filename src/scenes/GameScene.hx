@@ -42,6 +42,7 @@ class GameScene extends Scene
     var currentEffect : Effect;
     var buttonHolder : ButtonHolder;
     var effectButtons : Array<GameButton>;
+    var effectsMusics : Map<Effect, Sound>;
     var resetRib : Ribbon;
     var windRib : Ribbon;
 
@@ -91,6 +92,15 @@ class GameScene extends Scene
         gridHolder.setPosition(-39.4, -87);
         buildLevel(level);
         windDirection = 1;
+
+        effectsMusics = 
+        [
+            Water => hxd.Res.sounds.Ben.Musique_eau,
+            Earth => hxd.Res.sounds.Ben.Musique_terre,
+            Wind => hxd.Res.sounds.Ben.Musique_vent,
+            Fire => hxd.Res.sounds.Ben.Musique_feu,
+            None => hxd.Res.sounds.Ben.Musique_Base
+        ];
         
         //Ribbons
         var ribs : Array<Tile> = hxd.Res.images.ribbons.toTile().split(2);
@@ -377,6 +387,8 @@ class GameScene extends Scene
             if(b.effect != effect && b.isSelected)
                 b.isSelected = false;
         }
+
+        AudioManager.playMusic(effectsMusics.get(currentEffect));
 
         ui.needReflow = false;
     }

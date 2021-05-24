@@ -16,10 +16,17 @@ class AudioManager
 
     public static function playMusic(music : Sound, loop : Bool = true)
     {
+        var t : Float = 0;
+
         if(musicChanel != null && musicChanel.sound != null)
+        {
+            t = musicChanel.position;
+            trace(t);
             musicChanel.stop();
+        }
 
         musicChanel = music.play(loop, musicVolume);
+        musicChanel.position = t;
         musicChanel.mute = musicMute;
     }
 
