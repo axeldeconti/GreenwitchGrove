@@ -1,3 +1,6 @@
+import hxd.snd.effect.LowPass;
+import hxd.snd.effect.ReverbPreset;
+import hxd.snd.effect.Reverb;
 import scenes.GameScene.Effect;
 import hxd.res.Sound;
 
@@ -19,46 +22,59 @@ class AudioManager
 
     public static var sfxMute (default, set) : Bool = false;
 
-    static var effectsMusics : Map<Effect, Sound>;
+    static var currentEffect = None;
+
+    static var fadeIn : Float = 1;
+
+    static var fadeOut : Float = 1;
 
     public static function init()
     {
-        effectsMusics = 
-        [
-            Water => hxd.Res.sounds.Ben.Musique_eau,
-            Earth => hxd.Res.sounds.Ben.Musique_terre,
-            Wind => hxd.Res.sounds.Ben.Musique_vent,
-            Fire => hxd.Res.sounds.Ben.Musique_feu,
-            None => hxd.Res.sounds.Ben.Musique_Base
-        ];
-
-        baseChanel = effectsMusics[None].play(true, 1);
-        waterChanel = effectsMusics[Water].play(true, 1);
-        waterChanel.mute = true;
-        earthChanel = effectsMusics[Earth].play(true, 1);
-        earthChanel.mute = true;
-        fireChanel = effectsMusics[Fire].play(true, 1);
-        fireChanel.mute = true;
-        windChanel = effectsMusics[Wind].play(true, 1);
-        windChanel.mute = true;
+        baseChanel = hxd.Res.sounds.Ben.Musique_Base.play(true, 1);
+        waterChanel = hxd.Res.sounds.Ben.Musique_eau.play(true, 1);
+        waterChanel.volume = 0.01;
+        earthChanel = hxd.Res.sounds.Ben.Musique_terre.play(true, 1);
+        earthChanel.volume = 0.01;
+        fireChanel = hxd.Res.sounds.Ben.Musique_feu.play(true, 1);
+        fireChanel.volume = 0.01;
+        windChanel = hxd.Res.sounds.Ben.Musique_vent.play(true, 1);
+        windChanel.volume = 0.01;
     }
 
     public static function playMusic(effect : Effect)
     {
-        baseChanel.mute = true;
-        waterChanel.mute = true;
-        earthChanel.mute = true;
-        fireChanel.mute = true;
-        windChanel.mute = true;
+        if(effect == currentEffect)
+            return;
+
+        switch (currentEffect)
+        {
+            case None :
+                baseChanel.fadeTo(0.01, fadeOut);
+            case Water : 
+                waterChanel.fadeTo(0.01, fadeOut);
+            case Earth : 
+                earthChanel.fadeTo(0.01, fadeOut);
+            case Fire : 
+                fireChanel.fadeTo(0.01, fadeOut);
+            case Wind : 
+                windChanel.fadeTo(0.01, fadeOut);
+        }
 
         switch (effect)
         {
-            case None : baseChanel.mute = false;
-            case Water : waterChanel.mute = false;
-            case Earth : earthChanel.mute = false;
-            case Fire : fireChanel.mute = false;
-            case Wind : windChanel.mute = false;
+            case None :
+                baseChanel.fadeTo(1, fadeIn);
+            case Water : 
+                waterChanel.fadeTo(1, fadeIn);
+            case Earth : 
+                earthChanel.fadeTo(1, fadeIn);
+            case Fire : 
+                fireChanel.fadeTo(1, fadeIn);
+            case Wind : 
+                windChanel.fadeTo(1, fadeIn);
         }
+
+        currentEffect = effect;
     }
 
     public static function playSfx(sfx : Sound, loop : Bool = false)

@@ -102,7 +102,6 @@ class GameScene extends Scene
         tutoText = new HtmlText(hxd.res.DefaultFont.get(), b);
         tutoText.setPosition(10, 40);
         tutoText.textAlign = Left;
-        tutoText.text = "quoisehfpqsuihfgpquhrgoiusdhdfg^q";
         var t : Tile = hxd.Res.images.OkButton.toTile().sub(0, 0, 32, 16);
         var button : Button = new Button(tutoHolder, t.width, t.height);
         button.setPosition(-16, -40);
@@ -111,7 +110,7 @@ class GameScene extends Scene
         button.hover.customTile = hxd.Res.images.OkButton.toTile().sub(32, 0, 32, 16);
         button.hold.customTile = t;
         button.press.customTile = t;
-        button.onClick = (e) -> {gameTime.play = true; tutoHolder.visible = false;};
+        button.onClick = (e) -> {gameTime.play = true; tutoHolder.visible = false; AudioManager.playSfx(hxd.Res.sounds.Clic);};
         tutoHolder.visible = false;
 
         //Build level
@@ -432,6 +431,65 @@ class GameScene extends Scene
 
         //ImGui.image(levels[currentLevel].getTexture().id, {x : 12, y : 12});
         Inspector.image(levels[currentLevel]);
+
+        //'$name###$name$uID'
+        var bc = new hl.NativeArray<Single>(1);
+        bc[0] = AudioManager.baseChanel.position;
+        ImGui.sliderFloat('Base channel###$name$uID', bc, 0, AudioManager.baseChanel.duration);
+
+        Inspector.checkbox("Base mute", uID, AudioManager.baseChanel.mute);
+
+        // var bcv = new hl.NativeArray<Single>(1);
+        // bcv[0] = AudioManager.baseChanel.volume;
+        // ImGui.sliderFloat('Base volume###$name$uID', bcv, 0, 1);
+
+        ImGui.spacing();
+
+        var wac = new hl.NativeArray<Single>(1);
+        wac[0] = AudioManager.waterChanel.position;
+        ImGui.sliderFloat('Water channel###$name$uID', wac, 0, AudioManager.waterChanel.duration);
+
+        Inspector.checkbox("Water mute", uID, AudioManager.waterChanel.mute);
+
+        // var wacv = new hl.NativeArray<Single>(1);
+        // wacv[0] = AudioManager.waterChanel.volume;
+        // ImGui.sliderFloat('Water volume###$name$uID', wacv, 0, 1);
+
+        ImGui.spacing();
+
+        var fc = new hl.NativeArray<Single>(1);
+        fc[0] = AudioManager.fireChanel.position;
+        ImGui.sliderFloat('Fire channel###$name$uID', fc, 0, AudioManager.fireChanel.duration);
+
+        Inspector.checkbox("Fire mute", uID, AudioManager.fireChanel.mute);
+
+        // var fcv = new hl.NativeArray<Single>(1);
+        // fcv[0] = AudioManager.fireChanel.volume;
+        // ImGui.sliderFloat('Fire volume###$name$uID', fcv, 0, 1);
+
+        ImGui.spacing();
+
+        var ec = new hl.NativeArray<Single>(1);
+        ec[0] = AudioManager.earthChanel.position;
+        ImGui.sliderFloat('Earth channel###$name$uID', ec, 0, AudioManager.earthChanel.duration);
+
+        Inspector.checkbox("Earth mute", uID, AudioManager.earthChanel.mute);
+
+        // var ecv = new hl.NativeArray<Single>(1);
+        // ecv[0] = AudioManager.earthChanel.volume;
+        // ImGui.sliderFloat('Earth volume###$name$uID', ecv, 0, 1);
+
+        ImGui.spacing();
+
+        var wic = new hl.NativeArray<Single>(1);
+        wic[0] = AudioManager.windChanel.position;
+        ImGui.sliderFloat('Wind channel###$name$uID', wic, 0, AudioManager.windChanel.duration);
+
+        Inspector.checkbox("BWind mute", uID, AudioManager.windChanel.mute);
+
+        // var wicv = new hl.NativeArray<Single>(1);
+        // wicv[0] = AudioManager.windChanel.volume;
+        // ImGui.sliderFloat('Wind volume###$name$uID', wicv, 0, 1);
     }
 }
 
