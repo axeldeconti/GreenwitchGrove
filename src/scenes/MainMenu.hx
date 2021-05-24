@@ -35,7 +35,7 @@ class MainMenu extends Scene
 
         camera.zoom = 4.4;
 
-        AudioManager.playMusic(hxd.Res.sounds.Ben.Musique_Base);
+        AudioManager.init();
 
         new Wand(scroller);
 
