@@ -18,7 +18,7 @@ class AudioManager
 
     public static var sfxChanel : Null<hxd.snd.Channel>;
 
-    public static var sfxVolume (default, set) : Float = 1;
+    public static var sfxVolume (default, set) : Float = 0.4;
 
     public static var sfxMute (default, set) : Bool = false;
 

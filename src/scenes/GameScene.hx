@@ -263,6 +263,7 @@ class GameScene extends Scene
             else 
             {
                 //Build next level
+                AudioManager.playSfx(hxd.Res.sounds.Goal);
                 buildLevel(levels[currentLevel]);
                 return;
             }
