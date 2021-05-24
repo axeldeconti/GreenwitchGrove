@@ -22,6 +22,7 @@ class MainMenu extends Scene
     var a : Float;
     var speed : Float = 1;
     var amplitude : Float = 1.5;
+    var origin : Float = -20;
 
     var button : Button;
 
@@ -34,6 +35,8 @@ class MainMenu extends Scene
 
         camera.zoom = 4.4;
 
+        AudioManager.playMusic(hxd.Res.sounds.Ben.Musique_Base);
+
         new Wand(scroller);
 
         bg = new GameObject("Bg", scroller);
@@ -41,7 +44,7 @@ class MainMenu extends Scene
         bg.setPosition(0, 37.6);
         title = new GameObject("Title", bg);
         title.changeTile(hxd.Res.images.Title.toTile());
-        title.setPosition(0, -20);
+        title.setPosition(0, origin);
         a = 0;
 
         var t : Tile = hxd.Res.images.playbutton.toTile();
@@ -66,8 +69,8 @@ class MainMenu extends Scene
     {
         super.update(dt);
 
-        a += dt * speed;
-        title.setPosition(0, -20 + Math.cos(a) * amplitude);
+        a += (dt * speed) % 360;
+        title.setPosition(0, origin + Math.cos(a) * amplitude);
     }
 
     override function drawInfo() 
