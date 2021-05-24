@@ -1,12 +1,17 @@
+import scenes.GameScene.Effect;
 import hxd.res.Sound;
 
-class AudioManager 
+class AudioManager
 {
-    public static var musicChanel : Null<hxd.snd.Channel>;
+    public static var baseChanel : Null<hxd.snd.Channel>;
+    public static var waterChanel : Null<hxd.snd.Channel>;
+    public static var earthChanel : Null<hxd.snd.Channel>;
+    public static var fireChanel : Null<hxd.snd.Channel>;
+    public static var windChanel : Null<hxd.snd.Channel>;
 
-    public static var musicVolume (default, set) : Float = 1;
+    public static var musicVolume : Float = 1;
 
-    public static var musicMute (default, set) : Bool = false;
+    public static var musicMute : Bool = false;
 
     public static var sfxChanel : Null<hxd.snd.Channel>;
 
@@ -14,19 +19,46 @@ class AudioManager
 
     public static var sfxMute (default, set) : Bool = false;
 
-    public static function playMusic(music : Sound, loop : Bool = true)
+    static var effectsMusics : Map<Effect, Sound>;
+
+    public static function init()
     {
-        var t : Float = 0;
+        effectsMusics = 
+        [
+            Water => hxd.Res.sounds.Ben.Musique_eau,
+            Earth => hxd.Res.sounds.Ben.Musique_terre,
+            Wind => hxd.Res.sounds.Ben.Musique_vent,
+            Fire => hxd.Res.sounds.Ben.Musique_feu,
+            None => hxd.Res.sounds.Ben.Musique_Base
+        ];
 
-        if(musicChanel != null && musicChanel.sound != null)
+        baseChanel = effectsMusics[None].play(true, 1);
+        waterChanel = effectsMusics[Water].play(true, 1);
+        waterChanel.mute = true;
+        earthChanel = effectsMusics[Earth].play(true, 1);
+        earthChanel.mute = true;
+        fireChanel = effectsMusics[Fire].play(true, 1);
+        fireChanel.mute = true;
+        windChanel = effectsMusics[Wind].play(true, 1);
+        windChanel.mute = true;
+    }
+
+    public static function playMusic(effect : Effect)
+    {
+        baseChanel.mute = true;
+        waterChanel.mute = true;
+        earthChanel.mute = true;
+        fireChanel.mute = true;
+        windChanel.mute = true;
+
+        switch (effect)
         {
-            t = musicChanel.position;
-            musicChanel.stop();
+            case None : baseChanel.mute = false;
+            case Water : waterChanel.mute = false;
+            case Earth : earthChanel.mute = false;
+            case Fire : fireChanel.mute = false;
+            case Wind : windChanel.mute = false;
         }
-
-        musicChanel = music.play(loop, musicVolume);
-        musicChanel.position = t;
-        musicChanel.mute = musicMute;
     }
 
     public static function playSfx(sfx : Sound, loop : Bool = false)
@@ -37,11 +69,23 @@ class AudioManager
 
     public static function dispose()
     {
-        if(musicChanel != null)
-            musicChanel.stop();
+        if(baseChanel != null)
+            baseChanel.stop();
+
+        if(waterChanel != null)
+            waterChanel.stop();
+
+        if(earthChanel != null)
+            earthChanel.stop();
+
+        if(baseChanel != null)
+            baseChanel.stop();
+
+        if(fireChanel != null)
+            fireChanel.stop();
         
-        if(sfxChanel != null)
-            sfxChanel.stop();
+        if(windChanel != null)
+            windChanel.stop();
 
         hxd.snd.Manager.get().dispose();
     }
@@ -49,26 +93,6 @@ class AudioManager
     //-------------------------------
     //#region Getters & Setters
     //-------------------------------
-    static function set_musicVolume(value : Float) : Float
-    {
-        musicVolume = value;
-
-        if(musicChanel != null)
-            musicChanel.volume = musicVolume;
-
-        return musicVolume;
-    }
-
-    static function set_musicMute(value : Bool) : Bool
-    {
-        musicMute = value;
-
-        if(musicChanel != null)
-            musicChanel.mute = musicMute;
-
-        return musicMute;
-    }
-
     static function set_sfxVolume(value : Float) : Float
     {
         sfxVolume = value;
