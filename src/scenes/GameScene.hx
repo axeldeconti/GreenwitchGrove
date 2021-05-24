@@ -105,6 +105,12 @@ class GameScene extends Scene
         {
             buildLevel(levels[currentLevel]);
             AudioManager.playSfx(hxd.Res.sounds.Reset);
+            armoise.didNothingCount = 0;
+            if(windDirection == -1)
+            {
+                windDirection = 1;
+                windRib.tile.flipX();
+            }
         });
         resetRib.setPosition(-127.7, -43);
 
@@ -139,6 +145,9 @@ class GameScene extends Scene
         else if(InputManager.getKeyDown("RightArrow"))
             moveFlower(1, 0);
         #end
+
+        if(InputManager.getKeyDown("Escape"))
+            Engine.instance.addScene(new MainMenu());
     }
 
     function buildLevel(level : Tile)

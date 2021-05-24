@@ -6,8 +6,8 @@ import h2d.Tile;
 
 class Armoise extends Flower
 {
-    var didNothingCount : Int;
-    var countToPlow : Int = 3;
+    public var didNothingCount : Int;
+    var countToPlow : Int = 4;
 
     override public function new(scene : GameScene, tile : Tile) 
     {
@@ -29,7 +29,7 @@ class Armoise extends Flower
         else
         {
             //Continu growing
-            if(scene.currentDirection == 5 || scene.currentDirection == 9)
+            if(didNothingCount >= countToPlow && (scene.currentDirection == 5 || scene.currentDirection == 9))
             {
                 //Go down
                 scene.moveFlower(0, 1);
@@ -75,9 +75,9 @@ class Armoise extends Flower
         scene.moveFlower(scene.windDirection, 0);
     }
 
-    override function applyFire() 
+    override function applyFire()
     {
-        didNothingCount = 0;
+        didNothingCount = countToPlow;
 
         //Change last
         if(gamesTiles.length > 1)

@@ -19,6 +19,8 @@ class GameTime extends Process
 
     var started : Bool = false;
 
+    public var play : Bool = true;
+
     public override function new(scene : GameScene)
     {
         super("GameTime", scene);
@@ -54,6 +56,9 @@ class GameTime extends Process
         if(!started)
             start();
 
+        if(!play)
+            return;
+
         currentTime += dt;
 
         var angle : Float = -2 * AMath.PI * currentTime / loopTime;
@@ -84,6 +89,8 @@ class GameTime extends Process
     override function drawInfo() 
     {
         super.drawInfo();
+
+        play = Inspector.checkbox("Play", uID, play);
 
         var lt : Array<Float> = [loopTime];
         Inspector.dragFields("Loop time", uID, lt, "%.1f");

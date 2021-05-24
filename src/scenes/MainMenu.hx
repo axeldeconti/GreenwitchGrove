@@ -1,9 +1,8 @@
 package scenes;
 
-import avenyrh.imgui.ImGui;
+import h2d.HtmlText;
+import h2d.Text;
 import avenyrh.engine.Inspector;
-import avenyrh.AMath;
-import avenyrh.utils.Tween;
 import h2d.Tile;
 import avenyrh.ui.Button;
 import avenyrh.gameObject.GameObject;
