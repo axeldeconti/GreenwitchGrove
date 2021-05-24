@@ -22,7 +22,7 @@ class MainMenu extends Scene
     var title : GameObject;
     var a : Float;
     var speed : Float = 1;
-    var amplitude : Float = 5;
+    var amplitude : Float = 1.5;
 
     var button : Button;
 
@@ -39,7 +39,7 @@ class MainMenu extends Scene
 
         bg = new GameObject("Bg", scroller);
         bg.changeTile(hxd.Res.images.Titlescreen.toTile());
-        bg.setPosition(0, 56);
+        bg.setPosition(0, 37.6);
         title = new GameObject("Title", bg);
         title.changeTile(hxd.Res.images.Title.toTile());
         title.setPosition(0, -20);
@@ -60,7 +60,7 @@ class MainMenu extends Scene
 
         gameJam = new GameObject("GameJam", scroller);
         gameJam.changeTile(hxd.Res.images.gamejamreconstruction2021.toTile());
-        gameJam.setPosition(80, 135);
+        gameJam.setPosition(80, 137);
     }
 
     override function update(dt : Float) 
