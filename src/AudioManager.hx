@@ -1,6 +1,3 @@
-import hxd.snd.effect.LowPass;
-import hxd.snd.effect.ReverbPreset;
-import hxd.snd.effect.Reverb;
 import scenes.GameScene.Effect;
 import hxd.res.Sound;
 
@@ -28,8 +25,15 @@ class AudioManager
 
     static var fadeOut : Float = 1;
 
+    static var isInit : Bool = false;
+
     public static function init()
     {
+        if(isInit)
+            return;
+
+        isInit = true;
+
         baseChanel = hxd.Res.sounds.Ben.Musique_Base.play(true, 1);
         waterChanel = hxd.Res.sounds.Ben.Musique_eau.play(true, 1);
         waterChanel.volume = 0.01;

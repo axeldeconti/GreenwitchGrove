@@ -130,7 +130,8 @@ class MainMenu extends Scene
         controlHolder.changeTile(hxd.Res.images.tutoScreen.toTile());
         controlHolder.visible = false;
         txt = new HtmlText(hxd.res.DefaultFont.get(), controlHolder);
-        txt.setPosition(-100, 0);
+        txt.scale(0.6);
+        txt.setPosition(-36, -180);
         txt.text = TutoText.controlText;
         var holder : GameObject = new GameObject("Game Time", controlHolder);
         holder.scale(0.8);

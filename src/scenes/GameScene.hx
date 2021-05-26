@@ -113,6 +113,20 @@ class GameScene extends Scene
         button.onClick = (e) -> {gameTime.play = true; tutoHolder.visible = false; AudioManager.playSfx(hxd.Res.sounds.Clic);};
         tutoHolder.visible = false;
 
+        t = hxd.Res.images.menuButton.toTile();
+        button = new Button(scroller, t.width, t.height);
+        button.scale(0.718);
+        scroller.addChildAt(button, 3);
+        button.setPosition(80, -116);
+        button.useColor = false;
+        button.idle.customTile = t;
+        button.hover.customTile = t;
+        button.hold.customTile = t;
+        button.press.customTile = t;
+        button.onClick = (e) -> {AudioManager.playSfx(hxd.Res.sounds.Clic); Engine.instance.addScene(new MainMenu());};
+        button.onOver = (e) -> button.alpha = 0.6;
+        button.onOut = (e) -> button.alpha = 1;
+
         //Build level
         gridHolder = new Object(scroller);
         gridHolder.setPosition(-39.4, -87);
