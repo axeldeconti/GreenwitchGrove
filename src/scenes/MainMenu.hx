@@ -1,5 +1,7 @@
 package scenes;
 
+import h2d.Bitmap;
+import h2d.Object;
 import avenyrh.Color;
 import h2d.HtmlText;
 import h2d.Text;
@@ -28,6 +30,8 @@ class MainMenu extends Scene
     var playButton : Button;
     var creditsButton : Button;
     var creditsHolder : GameObject;
+    var controlButton : Button;
+    var controlHolder : GameObject;
     var quitButton : Button;
 
     var gameJam : GameObject;
@@ -54,7 +58,7 @@ class MainMenu extends Scene
         var t : Tile = hxd.Res.images.playbutton.toTile();
         playButton = new Button(scroller, t.width, t.height);
         scroller.addChildAt(playButton, 3);
-        playButton.setPosition(-120, 40);
+        playButton.setPosition(-90, 24);
         playButton.useColor = false;
         playButton.idle.customTile = t;
         playButton.hover.customTile = t;
@@ -67,7 +71,7 @@ class MainMenu extends Scene
         t = hxd.Res.images.creditsbutton.toTile();
         creditsButton = new Button(scroller, t.width, t.height);
         scroller.addChildAt(creditsButton, 3);
-        creditsButton.setPosition(-40, 40);
+        creditsButton.setPosition(-90, 50);
         creditsButton.useColor = false;
         creditsButton.idle.customTile = t;
         creditsButton.hover.customTile = t;
@@ -97,7 +101,7 @@ class MainMenu extends Scene
         t = hxd.Res.images.QuitButton.toTile();
         quitButton = new Button(scroller, t.width, t.height);
         scroller.addChildAt(quitButton, 3);
-        quitButton.setPosition(50, 40);
+        quitButton.setPosition(10, 50);
         quitButton.useColor = false;
         quitButton.idle.customTile = t;
         quitButton.hover.customTile = t;
@@ -106,6 +110,46 @@ class MainMenu extends Scene
         quitButton.onClick = (e) -> Boot.instance.exit();
         quitButton.onOver = (e) -> quitButton.alpha = 0.6;
         quitButton.onOut = (e) -> quitButton.alpha = 1;
+
+        t = hxd.Res.images.controlButton.toTile();
+        controlButton = new Button(scroller, t.width, t.height);
+        scroller.addChildAt(controlButton, 3);
+        controlButton.setPosition(10, 24);
+        controlButton.useColor = false;
+        controlButton.idle.customTile = t;
+        controlButton.hover.customTile = t;
+        controlButton.hold.customTile = t;
+        controlButton.press.customTile = t;
+        controlButton.onClick = (e) -> {controlHolder.visible = true; AudioManager.playSfx(hxd.Res.sounds.Clic);};
+        controlButton.onOver = (e) -> controlButton.alpha = 0.6;
+        controlButton.onOut = (e) -> controlButton.alpha = 1;
+        controlHolder = new GameObject("Controls", scroller);
+        scroller.addChildAt(controlHolder, 3);
+        controlHolder.setPosition(0, 64);
+        controlHolder.setScale(0.7);
+        controlHolder.changeTile(hxd.Res.images.tutoScreen.toTile());
+        controlHolder.visible = false;
+        txt = new Text(hxd.res.DefaultFont.get(), controlHolder);
+        txt.setPosition(-100, 0);
+        txt.text = TutoText.controlText;
+        var holder : GameObject = new GameObject("Game Time", controlHolder);
+        holder.scale(0.8);
+        holder.setPosition(-112.6, -152.8);
+        var gameTimeBg : Bitmap = new Bitmap(hxd.Res.images.GameTimeBg.toTile(), holder);
+        gameTimeBg.tile.dx = -32;
+        gameTimeBg.tile.dy = -32;
+        var border : Bitmap = new Bitmap(hxd.Res.images.GameTimeBorder.toTile(), holder);
+        border.tile.dx = -32;
+        border.tile.dy = -32;
+        var t : Tile = hxd.Res.images.OkButton.toTile().sub(0, 0, 32, 16);
+        var button : Button = new Button(controlHolder, t.width, t.height);
+        button.setPosition(30, -3);
+        button.useColor = false;
+        button.idle.customTile = t;
+        button.hover.customTile = t;
+        button.hold.customTile = hxd.Res.images.OkButton.toTile().sub(32, 0, 32, 16);
+        button.press.customTile = hxd.Res.images.OkButton.toTile().sub(32, 0, 32, 16);
+        button.onClick = (e) -> {controlHolder.visible = false; AudioManager.playSfx(hxd.Res.sounds.Clic);};
 
         gameJam = new GameObject("GameJam", scroller);
         gameJam.changeTile(hxd.Res.images.gamejamreconstruction2021.toTile());
