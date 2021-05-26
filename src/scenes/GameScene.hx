@@ -100,16 +100,16 @@ class GameScene extends Scene
         var b : Bitmap = new Bitmap(hxd.Res.images.textBoxWide.toTile(), tutoHolder);
         b.setPosition(-162, -150);
         tutoText = new HtmlText(hxd.res.DefaultFont.get(), b);
-        tutoText.setPosition(10, 40);
+        tutoText.setPosition(10, 30);
         tutoText.textAlign = Left;
         var t : Tile = hxd.Res.images.OkButton.toTile().sub(0, 0, 32, 16);
         var button : Button = new Button(tutoHolder, t.width, t.height);
         button.setPosition(-16, -40);
         button.useColor = false;
         button.idle.customTile = t;
-        button.hover.customTile = hxd.Res.images.OkButton.toTile().sub(32, 0, 32, 16);
-        button.hold.customTile = t;
-        button.press.customTile = t;
+        button.hover.customTile = t;
+        button.hold.customTile = hxd.Res.images.OkButton.toTile().sub(32, 0, 32, 16);
+        button.press.customTile = hxd.Res.images.OkButton.toTile().sub(32, 0, 32, 16);
         button.onClick = (e) -> {gameTime.play = true; tutoHolder.visible = false; AudioManager.playSfx(hxd.Res.sounds.Clic);};
         tutoHolder.visible = false;
 
