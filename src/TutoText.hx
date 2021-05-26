@@ -10,5 +10,14 @@ class TutoText
         8 => 'Avec le <font color="#ad2727">feu</font>, je fléchis aussi plus vite.'
     ];
 
-    public static var controlText : String = '';
+    public static var controlText : String = '<p>1. Vous ne pouvez jouer que pendant le jour.</p>
+    <p>2. Pour faire pousser la plante, il faut faire appel aux éléments :</p>
+    <p>- L’<font color="#4a6ca9">eau</font> vous permet de la faire pousser vers le haut.</p>
+    <p>Après quelques jours sans <font color="#4a6ca9">eau</font>, la plante commencera à fléchir.</p>
+    <p>- L’<font color="#baa42e">air</font>.</p> modifie la direction de la plante. Le vent peut la porter</p><p>vers la droite ou vers la gauche.</p>
+    <p>- La <font color="#597d33">terre</font> permet à la plante de pousser deux fois plus vite.</p><p>Mais elle s’épuise tout autant, pensez donc à l’<font color="#4a6ca9">eau</font> !</p>
+    <p>- Le <font color="#ad2727">feu</font> annule la dernière action et fait reculer la plante.</p><p>Mais elle sera aussi desséchée et fléchira si vous la laissez sans <font color="#4a6ca9">eau</font>.</p>
+    <p>- <font color="#647782">CANC</font> vous permet d’annuler une action si vous préférez ne rien faire.</p>
+    <p>3. Si vous voulez changer la direction du vent, vous pouvez utiliser le <font color="#baa42e">ruban jaune</font>.</p><p>La flèche indiquera la direction actuelle.</p>
+    <p>Quand plus rien ne va, le <font color="#647782">ruban gris</font> vous permettra de recommencer le niveau.</p>';
 }
