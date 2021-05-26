@@ -131,7 +131,7 @@ class MainMenu extends Scene
         controlHolder.visible = false;
         txt = new HtmlText(hxd.res.DefaultFont.get(), controlHolder);
         txt.scale(0.6);
-        txt.setPosition(-36, -180);
+        txt.setPosition(-36, -185);
         txt.text = TutoText.controlText;
         var holder : GameObject = new GameObject("Game Time", controlHolder);
         holder.scale(0.8);
